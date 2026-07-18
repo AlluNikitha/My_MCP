@@ -19,11 +19,13 @@
   <div id="root"></div>
   <script type="module">
     // Dynamic Loader: Run dev version if on port 3000; otherwise run built version
-    if (window.location.port === '3000') {
+    const isDev = window.location.port === '3000' && !window.location.pathname.includes('/dist/');
+    if (isDev && !window.location.hostname.includes('github.io')) {
       import('/src/main.jsx');
     } else {
       // Determine prefix depending on whether we are in source folder or built dist folder
-      const isDist = window.location.pathname.includes('/dist/');
+      const isGitHubPages = window.location.hostname.includes('github.io');
+      const isDist = isGitHubPages || window.location.pathname.includes('/dist/') || window.location.port === '';
       const prefix = isDist ? './assets/' : './dist/assets/';
 
       // Add CSS stylesheet link dynamically
